@@ -20,6 +20,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
         self.view.addGestureRecognizer(tapRecognizer)
         
         self.tf_input.delegate = self
+        self.tf_input.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
