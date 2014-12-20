@@ -16,7 +16,7 @@ class ViewController: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("hideKeyboard"))
+        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("toggleKeyboard"))
         self.view.addGestureRecognizer(tapRecognizer)
         
         self.tf_input.delegate = self
@@ -34,14 +34,17 @@ class ViewController: UIViewController,UITextFieldDelegate {
         return false
     }
     
-    func hideKeyboard() {
-        tf_input.resignFirstResponder()
+    func toggleKeyboard() {
+        if (self.tf_input.isFirstResponder()) {
+            self.tf_input.resignFirstResponder()
+        } else {
+            self.tf_input.becomeFirstResponder()
+        }
     }
     
     func search() {
         if (UIReferenceLibraryViewController.dictionaryHasDefinitionForTerm(self.tf_input.text)) {
-            var dict = UIReferenceLibraryViewController(term: self.tf_input.text)
-            self.navigationController?.pushViewController(dict, animated: true)
+            self.navigationController?.pushViewController(UIReferenceLibraryViewController(term: self.tf_input.text), animated: true)
         }
     }
     
