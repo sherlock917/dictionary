@@ -8,19 +8,27 @@
 
 import UIKit
 
-class ViewController: UIViewController,UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var tf_input: UITextField!
+    @IBOutlet var tv_history: UITableView!
+    
+    var history = NSMutableArray()
+    let maxHistoryCount = 20
+    let historyCellIdentifier = "historyCell"
+    let historyFileName = "history.plist"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        var tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("toggleKeyboard"))
-        self.view.addGestureRecognizer(tapRecognizer)
-        
         self.tf_input.delegate = self
         self.tf_input.becomeFirstResponder()
+        
+        initHistory()
+        self.tv_history.registerClass(UITableViewCell.self, forCellReuseIdentifier: historyCellIdentifier)
+        self.tv_history.delegate = self
+        self.tv_history.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,23 +37,76 @@ class ViewController: UIViewController,UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        search()
+        search(self.tf_input.text)
+        saveHistory()
         self.tf_input.text = ""
         return false
     }
     
+    @IBAction func touchRightBtn(sender: AnyObject) {
+        self.toggleKeyboard()
+    }
+    
+    @IBAction func touchLeftBtn(sender: AnyObject) {
+        self.toggleKeyboard()
+    }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.tf_input.resignFirstResponder()
+    }
+    
     func toggleKeyboard() {
-        if (self.tf_input.isFirstResponder()) {
+        if self.tf_input.isFirstResponder() {
             self.tf_input.resignFirstResponder()
         } else {
             self.tf_input.becomeFirstResponder()
         }
     }
     
-    func search() {
-        if (UIReferenceLibraryViewController.dictionaryHasDefinitionForTerm(self.tf_input.text)) {
-            self.navigationController?.pushViewController(UIReferenceLibraryViewController(term: self.tf_input.text), animated: true)
+    func search(word : String) {
+        if UIReferenceLibraryViewController.dictionaryHasDefinitionForTerm(word) {
+            self.navigationController?.pushViewController(UIReferenceLibraryViewController(term: word), animated: true)
         }
+    }
+    
+    func initHistory() {
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(getHistoryPath()) {
+            self.history = NSMutableArray(contentsOfFile: getHistoryPath())!
+        }
+    }
+    
+    func updateHistory() {
+        self.tv_history.reloadData()
+    }
+    
+    func saveHistory() {
+        self.history.addObject(self.tf_input.text)
+        if self.history.count > self.maxHistoryCount {
+            self.history.removeObjectAtIndex(0)
+        }
+        self.history.writeToFile(getHistoryPath(), atomically: true)
+        updateHistory()
+    }
+    
+    func getHistoryPath() -> String {
+        let historyPath : String! = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
+        return historyPath.stringByAppendingPathComponent(self.historyFileName)
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.history.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell = self.tv_history.dequeueReusableCellWithIdentifier(self.historyCellIdentifier) as UITableViewCell
+        cell.textLabel?.text = self.history[self.history.count - indexPath.row - 1] as? String
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        search(self.tv_history.cellForRowAtIndexPath(indexPath)!.textLabel!.text!)
+        self.tv_history.deselectRowAtIndexPath(indexPath, animated: false)
     }
     
 }
