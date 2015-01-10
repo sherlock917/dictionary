@@ -26,7 +26,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         self.tf_input.becomeFirstResponder()
         
         initHistory()
-        self.tv_history.registerClass(UITableViewCell.self, forCellReuseIdentifier: historyCellIdentifier)
         self.tv_history.delegate = self
         self.tv_history.dataSource = self
     }
