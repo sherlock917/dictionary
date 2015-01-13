@@ -16,6 +16,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view from its nib.
+        self.launchBtn.layer.cornerRadius = 5
     }
     
     override func didReceiveMemoryWarning() {

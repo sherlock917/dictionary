@@ -17,11 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="37"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jYo-qQ-R7k">
-                                <rect key="frame" x="16" y="4" width="288" height="30"/>
-                                <state key="normal" title="Launch">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jYo-qQ-R7k">
+                                <rect key="frame" x="16" y="20" width="288" height="20"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Search in Dictionary">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="launchAction:" destination="M4Y-Lb-cyx" eventType="touchUpInside" id="waC-19-PET"/>
@@ -29,10 +30,10 @@
                             </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="X83-RT-Ned"/>
-                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" id="aHr-ny-S3c"/>
-                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="top" secondItem="Ft6-oW-KC0" secondAttribute="bottom" constant="4" id="uP4-CB-N2f"/>
-                            <constraint firstItem="FKl-LY-JtV" firstAttribute="top" secondItem="jYo-qQ-R7k" secondAttribute="bottom" constant="3" id="uxw-Vu-owS"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="jYo-qQ-R7k" secondAttribute="bottom" constant="-3" id="9Tf-xR-IEW"/>
+                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="trailing" secondItem="S3S-Oj-5AN" secondAttribute="trailingMargin" id="Xyv-oV-yus"/>
+                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="top" secondItem="S3S-Oj-5AN" secondAttribute="top" constant="20" id="e2M-Fc-x5x"/>
+                            <constraint firstItem="jYo-qQ-R7k" firstAttribute="leading" secondItem="S3S-Oj-5AN" secondAttribute="leadingMargin" id="nmx-aM-9uH"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
