@@ -28,6 +28,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         initHistory()
         self.tv_history.delegate = self
         self.tv_history.dataSource = self
+        self.tv_history.allowsMultipleSelectionDuringEditing = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,7 +38,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         search(self.tf_input.text)
-        saveHistory()
+        addHistory()
         self.tf_input.text = ""
         return false
     }
@@ -79,13 +80,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         self.tv_history.reloadData()
     }
     
-    func saveHistory() {
+    func addHistory() {
         self.history.addObject(self.tf_input.text)
         if self.history.count > self.maxHistoryCount {
             self.history.removeObjectAtIndex(0)
         }
-        self.history.writeToFile(getHistoryPath(), atomically: true)
+        saveHistory()
         updateHistory()
+    }
+    
+    func removeHistory(indexPath: NSIndexPath) {
+        self.history.removeObjectAtIndex(self.history.count - 1 - indexPath.row)
+        self.tv_history.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+        saveHistory()
+    }
+    
+    func saveHistory() {
+        self.history.writeToFile(getHistoryPath(), atomically: true)
     }
     
     func getHistoryPath() -> String {
@@ -106,6 +117,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         search(self.tv_history.cellForRowAtIndexPath(indexPath)!.textLabel!.text!)
         self.tv_history.deselectRowAtIndexPath(indexPath, animated: false)
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.Delete
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            removeHistory(indexPath)
+        }
     }
     
 }
