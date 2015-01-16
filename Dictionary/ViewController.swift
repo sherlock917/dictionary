@@ -14,7 +14,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet var tv_history: UITableView!
     @IBOutlet var lb_historyTitle: UILabel!
     
-    
     var history = NSMutableArray()
     let maxHistoryCount = 20
     let historyCellIdentifier = "historyCell"
