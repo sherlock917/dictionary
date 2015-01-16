@@ -8,10 +8,12 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate {
     
     @IBOutlet var tf_input: UITextField!
     @IBOutlet var tv_history: UITableView!
+    @IBOutlet var lb_historyTitle: UILabel!
+    
     
     var history = NSMutableArray()
     let maxHistoryCount = 20
@@ -28,7 +30,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         initHistory()
         self.tv_history.delegate = self
         self.tv_history.dataSource = self
-        self.tv_history.allowsMultipleSelectionDuringEditing = false
+        
+        let recognizer = UILongPressGestureRecognizer(target: self, action: "showClearAlert:")
+        self.lb_historyTitle.userInteractionEnabled = true
+        self.lb_historyTitle.addGestureRecognizer(recognizer)
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,8 +100,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         saveHistory()
     }
     
+    func clearHistory() {
+        self.history.removeAllObjects()
+        saveHistory()
+        updateHistory()
+    }
+    
     func saveHistory() {
         self.history.writeToFile(getHistoryPath(), atomically: true)
+    }
+    
+    func showClearAlert(guesture: UILongPressGestureRecognizer) {
+        if (guesture.state == UIGestureRecognizerState.Began) {
+            let alertView = UIAlertView(title: "NOTICE", message: "\nThis action will clear all saved history, are you sure?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "Yes")
+            alertView.show()
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 1) {
+            clearHistory()
+        }
     }
     
     func getHistoryPath() -> String {

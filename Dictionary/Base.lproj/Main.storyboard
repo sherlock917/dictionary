@@ -121,6 +121,7 @@
                         </button>
                     </navigationItem>
                     <connections>
+                        <outlet property="lb_historyTitle" destination="LqJ-D6-uQc" id="nDr-Nc-9gA"/>
                         <outlet property="tf_input" destination="5NV-FT-GLl" id="G7o-46-I21"/>
                         <outlet property="tv_history" destination="PoO-ZE-2gi" id="Dlk-Yq-xew"/>
                     </connections>
