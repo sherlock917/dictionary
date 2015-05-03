@@ -132,7 +132,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = self.tv_history.dequeueReusableCellWithIdentifier(self.historyCellIdentifier) as UITableViewCell
+        var cell = self.tv_history.dequeueReusableCellWithIdentifier(self.historyCellIdentifier) as! UITableViewCell
         cell.textLabel?.text = self.history[self.history.count - indexPath.row - 1] as? String
         return cell
     }
