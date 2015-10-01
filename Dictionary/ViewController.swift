@@ -41,7 +41,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        search(self.tf_input.text)
+        search(self.tf_input.text!)
         addHistory()
         self.tf_input.text = ""
         return false
@@ -85,7 +85,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func addHistory() {
-        self.history.addObject(self.tf_input.text)
+        self.history.addObject(self.tf_input.text!)
         if self.history.count > self.maxHistoryCount {
             self.history.removeObjectAtIndex(0)
         }
@@ -123,8 +123,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func getHistoryPath() -> String {
-        let historyPath : String! = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as? String
-        return historyPath.stringByAppendingPathComponent(self.historyFileName)
+        let historyPath : String! = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0]
+        var historyUrl = NSURL(string: historyPath)
+        historyUrl = historyUrl?.URLByAppendingPathComponent(self.historyFileName)
+        return (historyUrl?.absoluteString)!
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -132,7 +134,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = self.tv_history.dequeueReusableCellWithIdentifier(self.historyCellIdentifier) as! UITableViewCell
+        let cell : UITableViewCell = self.tv_history.dequeueReusableCellWithIdentifier(self.historyCellIdentifier)!
         cell.textLabel?.text = self.history[self.history.count - indexPath.row - 1] as? String
         return cell
     }
